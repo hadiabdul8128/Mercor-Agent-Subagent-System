@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Internal onboarding / pipeline docs — keep OUT of the public repo
+*.pdf
+00_full_document_all_tabs.pdf
+"EPM onboarding pdf all tabs.pdf"
+"Pod EPM pipeline process.pdf"
+
+# Future phases (not committed until built)
+# Supabase keys / env
+.env
+.env.*
+
+# Local scratch
+*.tmp
