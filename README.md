@@ -18,35 +18,39 @@ for domain background.
 
 ## Current status
 
-**Phase 0 / Phase 1 — planning layer + first agent only.**
+**Phases 1–5 built — the full repair pipeline exists.**
 
 Built:
 - Planning/context layer (`PLAN.md`, `CLAUDE.md`, `docs/`)
-- **Intake / Classifier Agent** (`.claude/agents/intake-classifier.md`)
-- `/classify-autoqc` slash command (`.claude/commands/classify-autoqc.md`)
+- **Intake / Classifier Agent** + `/classify-autoqc`
+- **Orchestrator** + file map (`docs/FILE_MAP.md`)
+- **9 specialist subagents** (one per AutoQC category; propose-only)
+- **Regression Agent** — the mandatory gate (PASS / FAIL / HUMAN_REVIEW / PASS_NO_EDIT)
+- **Patch Engine** — applies only approved patches, copy-on-write to `_repaired/`, never originals
+- **`/autoqc-repair`** — the writer's single entry point that drives the whole chain
+- Grounded against a real pipeline run (`docs/REFERENCE_PIPELINE.md`)
 
 Not built yet (deliberately):
-- Main Orchestrator Agent
-- Specialist subagents (documented, not implemented)
-- Regression Agent
-- Patch Engine (no automatic file editing)
-- Supabase / Obsidian memory layers
+- Supabase / Obsidian memory layers (Phase 6 — structured + human-readable history)
+- MCP server wrapper for VPS deployment
 
-## How to use the first agent (manually)
+## How a writer uses it
 
-1. Copy the full AutoQC issue text (the category line, the flagged path, and the offending text).
+1. Run your world files through AutoQC; copy a finding (category line, flagged path, offending
+   text). Make sure the world tree (`filesystem/`, `tasks/`, `meta/`) is in the working directory.
 2. In Claude Code, run:
    ```
-   /classify-autoqc
+   /autoqc-repair
    ```
-   then paste the AutoQC text. (Or just paste the text and ask Claude to use the
-   `intake-classifier` agent.)
-3. The agent returns:
-   - **Structured JSON** with category, subcriterion, severity, flagged path, folder scope,
-     offending text, writer-fixability, and recommended action.
-   - A **short human-readable recommendation**.
+   then paste the AutoQC finding. This drives the whole pipeline:
+   classify → route → diagnose/propose → **regression gate** → patch (only if PASS).
+3. You get back a repair report and — on a `PASS` — a patched copy in `_repaired/` (originals
+   untouched). On `tasks/`/`meta/` or risky findings you get override / escalate / human-review.
+4. **Re-run AutoQC on `_repaired/`** to confirm the fix and that nothing else regressed.
 
-The agent is **read-only**. It classifies and routes — it does not edit any files.
+To classify a finding *without* running the full pipeline, use `/classify-autoqc` (read-only).
+
+See `docs/REPAIR_WORKFLOW.md` for the full chain and the four verdicts.
 
 ### Example
 
@@ -60,8 +64,6 @@ Output (abridged):
 
 ## Next build steps
 
-- **Phase 2** — Main Orchestrator Agent + file map.
-- **Phase 3** — Specialist subagents (one per AutoQC criterion).
-- **Phase 4** — Regression Agent (gate before any patch).
-- **Phase 5** — Patch Engine (deterministic, copy-on-write).
-- **Phase 6** — Memory layer (Supabase + Obsidian).
+- **Phase 6** — Memory layer (Supabase structured history + Obsidian readable summaries).
+- **Deploy** — wrap as an MCP server on a VPS so the workplace team invokes it from their own
+  Claude Code (one company Anthropic API key on the server). See `PLAN.md`.
