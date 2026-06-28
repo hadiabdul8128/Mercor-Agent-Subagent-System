@@ -28,11 +28,17 @@ Built:
 - **Regression Agent** — the mandatory gate (PASS / FAIL / HUMAN_REVIEW / PASS_NO_EDIT)
 - **Patch Engine** — applies only approved patches, copy-on-write to `_repaired/`, never originals
 - **`/autoqc-repair`** — the writer's single entry point that drives the whole chain
+- **Memory layer (Phase 6)** — Supabase (structured: `supabase/migrations/`) + Obsidian mirror
+  (`obsidian-vault/`), written by `memory/sanctum_memory.py`
 - Grounded against a real pipeline run (`docs/REFERENCE_PIPELINE.md`)
 
 Not built yet (deliberately):
-- Supabase / Obsidian memory layers (Phase 6 — structured + human-readable history)
 - MCP server wrapper for VPS deployment
+
+## Setup (memory layer)
+
+Copy `.env.example` → `.env` and fill in your Supabase values (the `.env` is gitignored). The
+schema applies with `supabase db push`. See `memory/README.md`.
 
 ## How a writer uses it
 

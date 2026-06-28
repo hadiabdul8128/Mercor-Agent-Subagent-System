@@ -11,9 +11,14 @@
 # Supabase keys / env
 .env
 .env.*
+!.env.example
 
 # Local scratch
 *.tmp
 
 # Sample worlds — contain grader answers + trap docs; keep OUT of the public repo
 samples/
+
+# Obsidian vault — issue notes can reference grader/trap/answer content
+obsidian-vault/Issues/
+obsidian-vault/.obsidian/
