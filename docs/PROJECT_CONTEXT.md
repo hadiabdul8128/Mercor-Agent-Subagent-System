@@ -7,7 +7,7 @@ Background reading for any agent or human working in this repo.
 Project Sanctum produces **synthetic clinical world files**: realistic patient charts, clinical
 notes, medication lists, lab results, and the task scaffolding built around them. Writers author
 these world files. They are then run through **AutoQC**, an automated quality checker that flags
-issues across nine categories (see `docs/AUTOQC_CRITERIA.md`).
+issues across ten categories (see `docs/AUTOQC_CRITERIA.md`).
 
 The world files are used to build evaluation **tasks**. Each task poses a question whose correct
 answer ("golden answer") is recoverable from the world files, sometimes guarded by deliberate

@@ -1,6 +1,6 @@
 # AutoQC Criteria
 
-The nine AutoQC categories, their subcriteria, and what each future specialist subagent will
+The ten AutoQC categories, their subcriteria, and what each specialist subagent will
 inspect. One specialist subagent per category (Phase 3). Specialists **diagnose and propose
 only** — they never apply patches.
 
@@ -128,6 +128,26 @@ Ensures formatting, register, length, and completeness meet standards.
 - **Content Completeness (No Gaps)** — no missing required sections or content gaps.
 
 **Specialist will inspect:** formatting/register/length conformance and absence of content gaps.
+
+---
+
+## 10. World Files: Privacy & Compliance
+
+Protects the synthetic world from leaking real-world data — in both content and file metadata.
+
+**Subcriteria**
+- **No Real Patient Data and Copyright Clear** — patient identity is overtly synthetic
+  (e.g. "SynthOkafor"), with placeholder MRNs, fictional institutions, 555 phone numbers, and
+  synthetic insurance IDs; no PHI and no copyrighted material.
+- **No Embedded Metadata Leaks** — DOCX core properties (`creator`, `lastModifiedBy`, `title`,
+  `subject`, `description`) are empty with only generic application metadata; PDFs report
+  `Author=(anonymous)`, `Creator=(unspecified)`, and a fixed synthetic timestamp; no builder
+  identity or out-of-world content embedded.
+
+**Specialist will inspect:** content for real PHI / copyright / real identifiers / institutions /
+phone numbers, and DOCX/PDF metadata for authoring or builder identity and out-of-world residue.
+Overlaps Solution Integrity's metadata-residue check but with a PHI/copyright/authoring lens. The
+specialist may use read-only Bash to inspect binary `.docx`/`.pdf` metadata.
 
 ---
 

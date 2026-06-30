@@ -5,7 +5,7 @@ An agent/subagent system for repairing **AutoQC** issues in Project Sanctum clin
 
 ## What this repo is
 
-Writers generate clinical world files. AutoQC flags issues across nine categories (Solution
+Writers generate clinical world files. AutoQC flags issues across ten categories (Solution
 Integrity, Clinical Accuracy, Medication Reconciliation, Cross-Document Consistency, Temporal
 Integrity, Trap Architecture, Completeness, Realism & Authenticity, Documentation Standards).
 
@@ -24,7 +24,7 @@ Built:
 - Planning/context layer (`PLAN.md`, `CLAUDE.md`, `docs/`)
 - **Intake / Classifier Agent** + `/classify-autoqc`
 - **Orchestrator** + file map (`docs/FILE_MAP.md`)
-- **9 specialist subagents** (one per AutoQC category; propose-only)
+- **10 specialist subagents** (one per AutoQC category; propose-only)
 - **Regression Agent** — the mandatory gate (PASS / FAIL / HUMAN_REVIEW / PASS_NO_EDIT)
 - **Patch Engine** — applies only approved patches, copy-on-write to `_repaired/`, never originals
 - **`/autoqc-repair`** — the writer's single entry point that drives the whole chain

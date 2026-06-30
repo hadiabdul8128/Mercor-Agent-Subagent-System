@@ -7,7 +7,7 @@ How a writer uses this system, and how the agents chain together. This is the co
 
 ```
 1. Writer runs their world files through AutoQC.
-2. AutoQC returns findings (pass/fail across the 9 categories).
+2. AutoQC returns findings (pass/fail across the 10 categories).
 3. Writer reviews the output world files + findings.
 4. Writer runs THIS system:  /autoqc-repair  (paste the finding(s))
 5. System returns: classification → routed diagnosis → regression verdict →
@@ -35,7 +35,7 @@ category — and never touch the writer's original files.
       └─────────┬─────────┘
                 ▼
       ┌───────────────────┐
-      │   specialist ×1   │  diagnoses + PROPOSES (one of 9 categories);
+      │   specialist ×1   │  diagnoses + PROPOSES (one of 10 categories);
       │   (propose-only)  │  emits regression_concerns; never edits
       └─────────┬─────────┘
                 ▼
@@ -56,7 +56,7 @@ category — and never touch the writer's original files.
 
 | Verdict | What happened | Writer's next step |
 |---|---|---|
-| **PASS** | Fix is safe across all 9 categories; patch-engine applied it to `_repaired/` | Re-run AutoQC on `_repaired/` |
+| **PASS** | Fix is safe across all 10 categories; patch-engine applied it to `_repaired/` | Re-run AutoQC on `_repaired/` |
 | **FAIL** | Proposed fix would break another category; bounced back to the specialist | System re-proposes; review the blocking reasons |
 | **HUMAN_REVIEW** | Needs clinical judgment or trap-vs-error intent call | Pod lead decides before anything is applied |
 | **PASS_NO_EDIT** | Issue is internal (`tasks/`/`meta/`), a false positive, or should be overridden | Document / override / escalate — do **not** edit world files |

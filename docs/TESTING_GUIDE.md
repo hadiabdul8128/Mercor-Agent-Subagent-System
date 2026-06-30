@@ -12,7 +12,7 @@ test (failing findings); D is how to score a run; E is how to iterate when it ge
 ## Phase A — Setup & smoke test (does it load and behave?)
 
 1. **Open Claude Code in the project folder** (not the home dir). Run `/agents` → confirm all 13:
-   intake-classifier, orchestrator, the 9 specialists, regression-agent, patch-engine.
+   intake-classifier, orchestrator, the 10 specialists, regression-agent, patch-engine.
 2. **Confirm `.env` exists** (Supabase memory). If you cloned fresh from GitHub it won't be there
    (it's gitignored) — copy `.env.example` → `.env` and fill in values, or skip memory for now.
 3. **Smoke test the classifier** (read-only, safe):

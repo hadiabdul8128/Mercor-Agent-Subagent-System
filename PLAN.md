@@ -124,6 +124,7 @@ Root causes:
 | Completeness | File Set Complete; Supporting Clinical Data Present |
 | Realism and Authenticity | Clinical Cold-Read + AI Tells |
 | Documentation Standards | Formatting, Register & Length; Content Completeness (No Gaps) |
+| World Files: Privacy & Compliance | No Real Patient Data and Copyright Clear; No Embedded Metadata Leaks |
 
 ## 6. The Repair Loop
 

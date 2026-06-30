@@ -21,10 +21,10 @@ you are unsure. Follow all rules in `CLAUDE.md`.
 
 From the pasted AutoQC text, identify:
 
-1. **category** — one of the nine AutoQC categories:
+1. **category** — one of the ten AutoQC categories:
    Solution Integrity, Clinical Accuracy, Medication Reconciliation, Cross-Document Consistency,
    Temporal Integrity, Trap Architecture, Completeness, Realism and Authenticity,
-   Documentation Standards.
+   Documentation Standards, World Files: Privacy & Compliance.
 2. **subcriterion** — the specific subcriterion within that category
    (see `docs/AUTOQC_CRITERIA.md`).
 3. **severity** — as reported by AutoQC (e.g. high/medium/low/critical, or fail/warn). If not
