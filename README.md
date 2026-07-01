@@ -40,6 +40,17 @@ Not built yet (deliberately):
 Copy `.env.example` → `.env` and fill in your Supabase values (the `.env` is gitignored). The
 schema applies with `supabase db push`. See `memory/README.md`.
 
+## Quality gate
+
+Before pushing prompt-system changes, run:
+
+```bash
+python3 tools/validate_repo.py
+```
+
+This catches stale phase/count claims, missing agent definitions, and broken core contracts like
+the 10-category regression gate, `PASS_NO_EDIT`, and copy-on-write patching.
+
 ## How a writer uses it
 
 1. Run your world files through AutoQC; copy a finding (category line, flagged path, offending
@@ -70,6 +81,5 @@ Output (abridged):
 
 ## Next build steps
 
-- **Phase 6** — Memory layer (Supabase structured history + Obsidian readable summaries).
 - **Deploy** — wrap as an MCP server on a VPS so the workplace team invokes it from their own
   Claude Code (one company Anthropic API key on the server). See `PLAN.md`.

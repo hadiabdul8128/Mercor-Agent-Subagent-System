@@ -68,7 +68,7 @@ Set **recommended_action** to one of:
 
 ## Specialist routing
 
-Set **specialist_agent_to_call** to the specialist that owns the category (one of the nine), even
+Set **specialist_agent_to_call** to the specialist that owns the category (one of the 10), even
 if the action is override/escalate — so the orchestrator knows who would diagnose. If scope is
 `unknown`, leave it empty and use `needs_files`.
 

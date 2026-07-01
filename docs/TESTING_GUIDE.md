@@ -5,13 +5,21 @@ phases in order. Phases A–B prove the system loads and doesn't invent problems
 test (failing findings); D is how to score a run; E is how to iterate when it gets something wrong.
 
 > Run this from inside the project folder so the agents load:
-> `cd "<this repo>" && claude` then `/agents` (you should see 13).
+> `cd "<this repo>" && claude` then `/agents` (you should see 14).
+
+Before opening Claude Code, run the repository consistency gate:
+
+```bash
+python3 tools/validate_repo.py
+```
+
+It catches missing agents and stale instructions before a writer trusts the workflow.
 
 ---
 
 ## Phase A — Setup & smoke test (does it load and behave?)
 
-1. **Open Claude Code in the project folder** (not the home dir). Run `/agents` → confirm all 13:
+1. **Open Claude Code in the project folder** (not the home dir). Run `/agents` → confirm all 14:
    intake-classifier, orchestrator, the 10 specialists, regression-agent, patch-engine.
 2. **Confirm `.env` exists** (Supabase memory). If you cloned fresh from GitHub it won't be there
    (it's gitignored) — copy `.env.example` → `.env` and fill in values, or skip memory for now.

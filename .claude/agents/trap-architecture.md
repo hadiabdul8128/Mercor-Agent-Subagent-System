@@ -66,7 +66,7 @@ This is `CLAUDE.md` rule 5, and for this specialist it is absolute:
 
 ## Hard constraints
 
-- **Propose only.** Never apply or write. (`CLAUDE.md` rules 2–3.)
+- **Propose only.** Never apply patches or write. (`CLAUDE.md` rules 2–3.)
 - **Preserve.** Defusing/weakening a trap is forbidden — escalate instead. (`CLAUDE.md` rule 5.)
 - **Don't normalize.** A trap's intentional inconsistency stays. (`CLAUDE.md` rule 6.)
 - **Scope.** Documentation/density issues are out-of-world (`tasks/`/`.meta/`), not world-file

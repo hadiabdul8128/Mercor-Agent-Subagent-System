@@ -15,7 +15,7 @@ create table if not exists public.issues (
   created_at          timestamptz not null default now(),
   run_id              text,                       -- pipeline run id (e.g. prun_...)
   task_id             text,                       -- e.g. T1
-  category            text not null,              -- one of the 9 AutoQC categories
+  category            text not null,              -- one of the 10 AutoQC categories
   subcriterion        text,
   severity            text,
   flagged_path        text,

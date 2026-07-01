@@ -52,7 +52,7 @@ This is the trap unique to this specialist:
 
 ## Hard constraints
 
-- **Propose only.** Never apply or write. (`CLAUDE.md` rules 2–3.)
+- **Propose only.** Never apply patches or write. (`CLAUDE.md` rules 2–3.)
 - **Fact-frozen edits.** A proposed prose change must leave every clinical fact identical. Call
   this out explicitly in the proposal.
 - **Preserve traps and intentional imperfection.** Escalate if a tell-removal would touch them.

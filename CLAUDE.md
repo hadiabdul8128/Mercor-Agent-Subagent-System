@@ -9,8 +9,9 @@ specialist, regression-checks any proposed fix, and only then applies it — so 
 flagged issue does not silently break a different AutoQC category. See `PLAN.md` for the full
 architecture and `docs/PROJECT_CONTEXT.md` for domain background.
 
-Current status: **Phase 0/1.** Planning layer + Intake/Classifier Agent only. No app code, no
-automatic patching, no database.
+Current status: **Phases 1-6 built.** The full Claude Code prompt pipeline exists:
+Intake/Classifier, Orchestrator, 10 specialist subagents, Regression Agent, Patch Engine, and the
+Supabase/Obsidian memory writer. The MCP server wrapper for deployment is still future work.
 
 ## Global Rules
 
@@ -20,8 +21,8 @@ automatic patching, no database.
 2. **Subagents diagnose and propose only.** Specialist subagents do not apply patches. They emit
    a proposal and a rationale. Application is a separate, later, deterministic step.
 
-3. **No automatic patching until the Regression Agent exists.** Until Phase 4 is built, the
-   system stops at "proposed fix." Do not edit world files to "just fix it."
+3. **No patching without a Regression Agent PASS.** Specialist agents stop at "proposed fix."
+   The Patch Engine may write only after `regression_status: "PASS"` and `safe_to_apply: true`.
 
 4. **Classify folder scope before recommending any fix.** Always determine whether the flagged
    path is in `filesystem/`, `tasks/`, or `.meta/` first:
@@ -40,8 +41,9 @@ automatic patching, no database.
 7. **If clinical judgment is required, request human/pod-lead review.** Do not invent clinical
    values, codes, dosages, or chronology. Route to `human_review`.
 
-8. **Supabase and Obsidian are planned memory layers, not implemented yet.** Do not attempt to
-   connect, write to, or read from them. Document intent only (see `PLAN.md` §8).
+8. **Memory writes are optional and credential-gated.** Supabase and Obsidian support are built
+   through `memory/sanctum_memory.py`, but only run them when `.env` credentials are present and
+   the pipeline has a concrete repair event to record. Do not invent memory rows.
 
 ## Operating sequence (once later phases exist)
 
@@ -57,3 +59,4 @@ No step may be skipped. A proposal may never become an applied patch without reg
 - Keep agents narrowly scoped; do not dump every file into context.
 - Prefer Read/Grep/Glob over shell file manipulation.
 - When in doubt about scope or clinical correctness, **escalate** rather than edit.
+- Before pushing instruction changes, run `python3 tools/validate_repo.py`.

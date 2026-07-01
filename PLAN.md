@@ -7,13 +7,13 @@ medication lists, task assets). An automated quality checker, **AutoQC**, flags 
 multiple clinical and structural categories.
 
 This project builds an **agent/subagent system** that takes a pasted AutoQC issue, routes it to
-the correct specialist, runs a **regression check** before any change, and only then proposes a
-fix. The goal is to stop "whack-a-mole" repairs where fixing one flagged issue silently breaks a
-different AutoQC category.
+the correct specialist, runs a **regression check** before any change, and only then applies an
+approved fix to a copy. The goal is to stop "whack-a-mole" repairs where fixing one flagged issue
+silently breaks a different AutoQC category.
 
-This repo is currently in **Phase 0 / Phase 1**: planning layer plus the first agent (the
-Intake / Classifier Agent). No application code, no automatic file editing, and no database
-connection yet.
+This repo is currently in **Phases 1-6 built**: classifier, orchestrator, 10 specialists,
+regression gate, copy-on-write patch engine, and Supabase/Obsidian memory writer are present. The
+remaining deploy step is wrapping the workflow as an MCP server.
 
 ## 2. Problem Statement
 
@@ -38,13 +38,13 @@ Root causes:
 
 ```
                     ┌─────────────────────────────┐
-   pasted AutoQC →  │   Intake / Classifier Agent │  (Phase 1 — built)
+   pasted AutoQC →  │   Intake / Classifier Agent │
                     │  extract + classify + route │
                     └──────────────┬──────────────┘
                                    │ structured JSON
                                    ▼
                     ┌─────────────────────────────┐
-                    │   Main Orchestrator Agent   │  (Phase 2)
+                    │   Main Orchestrator Agent   │
                     │  holds file map + world      │
                     │  state; routes; decides      │
                     │  fix/override/escalate/human │
@@ -53,7 +53,7 @@ Root causes:
               ┌────────────────────┼────────────────────┐
               ▼                    ▼                    ▼
      ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-     │ Specialist Sub- │  │ Specialist Sub- │  │  ... one per     │  (Phase 3)
+     │ Specialist Sub- │  │ Specialist Sub- │  │  ... one per     │
      │ agent (per      │  │ agent           │  │  AutoQC criterion│
      │ AutoQC category)│  │                 │  │                  │
      │ diagnose+propose│  │ diagnose+propose│  │ diagnose+propose │
@@ -62,32 +62,32 @@ Root causes:
                                    │ proposed patch (NOT applied)
                                    ▼
                     ┌─────────────────────────────┐
-                    │      Regression Agent       │  (Phase 4)
+                    │      Regression Agent       │
                     │ does this fix break another  │
                     │ AutoQC category? approve/deny │
                     └──────────────┬──────────────┘
                                    │ approved patch only
                                    ▼
                     ┌─────────────────────────────┐
-                    │        Patch Engine         │  (Phase 5, deterministic code)
+                    │        Patch Engine         │
                     │ applies approved patch to a  │
                     │ COPY; originals never        │
                     │ overwritten                  │
                     └─────────────────────────────┘
 
-   Memory Layer (Phase 6): Supabase = structured source of truth;
-                           Obsidian = human-readable summaries.
+   Memory Layer: Supabase = structured source of truth;
+                 Obsidian = human-readable summaries.
 ```
 
 ## 4. Agent Roles
 
-### Main Orchestrator Agent (Phase 2)
+### Main Orchestrator Agent
 - Holds the file map and world state. Does **not** shove every file into context.
 - Receives the Classifier's JSON and routes to the correct specialist subagent.
 - Decides whether to **fix**, **override**, **escalate**, or **request human review**.
 - Owns the sequencing: specialist → regression → patch engine.
 
-### Intake / Classifier Agent (Phase 1 — built here)
+### Intake / Classifier Agent
 - First agent run whenever a user pastes an AutoQC issue.
 - Extracts category, subcriterion, severity, flagged path, offending text, recommended routing.
 - Classifies flagged path as `filesystem/`, `tasks/`, `.meta/`, or `unknown`.
@@ -95,16 +95,16 @@ Root causes:
 - Outputs structured JSON plus a short human-readable recommendation.
 - **Read-only.** Never proposes or applies edits.
 
-### Specialist Subagents (Phase 3)
+### Specialist Subagents
 - One subagent per AutoQC criterion.
 - They **diagnose and propose**. They do **not** directly apply patches.
 - Each is scoped to its own criterion so it does not "over-fix" neighboring concerns.
 
-### Regression Agent (Phase 4)
+### Regression Agent
 - Checks whether one proposed fix breaks another AutoQC category.
 - **No patch is applied without regression approval.**
 
-### Patch Engine (Phase 5)
+### Patch Engine
 - Deterministic code, not an LLM.
 - Subagents propose patches → Regression Agent approves → Patch Engine applies.
 - **Original files are never overwritten** (writes to copies / new versions).
@@ -166,9 +166,9 @@ Correct classification:
 - recommendation: Do **not** edit `filesystem/` world files. The residue is inside internal
   task config, not a world-facing clinical document.
 
-## 8. Memory Plan
+## 8. Memory Layer
 
-Not implemented yet — documented intent only.
+Implemented through `memory/sanctum_memory.py` and `supabase/migrations/`.
 
 **Supabase (structured source of truth):** proposed schema
 
@@ -188,26 +188,26 @@ proposal, regression verdict, and final action — for pod leads to read.
 ## 9. Regression Plan
 
 - Every specialist proposal must pass the Regression Agent before the Patch Engine runs.
-- The Regression Agent re-evaluates the proposed change against **all nine** AutoQC categories,
+- The Regression Agent re-evaluates the proposed change against **all 10** AutoQC categories,
   not just the originating one.
 - Verdict is binary (approve / deny) with a list of categories checked and any conflicts found.
 - Denials return to the specialist with the conflict, or escalate to human review.
 
-## 10. MVP Phases
+## 10. Built Phases
 
-- **Phase 0** — Planning/context layer. *(this commit)*
-- **Phase 1** — Intake / Classifier Agent. *(this commit)*
+- **Phase 0** — Planning/context layer.
+- **Phase 1** — Intake / Classifier Agent.
 - **Phase 2** — Main Orchestrator Agent + file map.
 - **Phase 3** — Specialist subagents (one per criterion).
 - **Phase 4** — Regression Agent.
 - **Phase 5** — Patch Engine (deterministic, copy-on-write).
 - **Phase 6** — Memory layer (Supabase + Obsidian).
 
-## 11. Non-Goals (for now)
+## 11. Non-Goals
 
-- No automatic file editing.
-- No connection to Supabase yet.
-- No specialist subagents beyond documentation yet.
+- No direct editing by classifier, orchestrator, specialists, or regression agent.
+- No patching without regression `PASS`.
+- No MCP server wrapper yet.
 - No overwriting of original files, ever.
 - No normalization of intentional inconsistencies or removal of intentional traps.
 - No clinical judgment calls made unilaterally — those go to human/pod-lead review.

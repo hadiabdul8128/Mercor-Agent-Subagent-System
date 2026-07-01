@@ -64,7 +64,7 @@ governs.**
 
 ## Hard constraints
 
-- **Propose only.** Never apply or write. (`CLAUDE.md` rules 2–3.)
+- **Propose only.** Never apply patches or write. (`CLAUDE.md` rules 2–3.)
 - **No fabrication.** Do not invent a missing clinical document — that requires generation and
   clinical content. Escalate. (`CLAUDE.md` rule 7.)
 - **Don't mistake intentional absence for a gap.** Some omissions are scope-appropriate or part of

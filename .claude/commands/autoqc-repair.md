@@ -28,10 +28,10 @@ flagged path, folder scope, offending text, writer-fixability, recommended actio
 **2. Route** — run the `orchestrator` agent on the classifier JSON. It validates scope, consults
 `docs/FILE_MAP.md` / the world tree, and decides the next agent.
 
-**3. Diagnose + propose** — run the specialist named by the orchestrator (one of the 9). It
+**3. Diagnose + propose** — run the specialist named by the orchestrator (one of the 10). It
 **proposes only**, with `regression_concerns`. It never edits.
 
-**4. Regression gate** — run the `regression-agent` on the proposal. It checks all 9 categories
+**4. Regression gate** — run the `regression-agent` on the proposal. It checks all 10 categories
 and returns `PASS`, `FAIL`, `HUMAN_REVIEW`, or `PASS_NO_EDIT`.
 
 **5. Act on the verdict:**
